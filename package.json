@@ -34,5 +34,8 @@
   },
   "scripts": {
     "version": "chg release -y && grunt dist && git add -f dist/ && git add CHANGELOG.md"
+  },
+  "dependencies": {
+    "react-videojs": "0.0.3"
   }
 }

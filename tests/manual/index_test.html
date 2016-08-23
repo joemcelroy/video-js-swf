@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+		<title>Kastr</title>
+	</head>
+	<body>
+		<script src="video.js"></script>
+    <link rel="stylesheet" type="text/css" href="video-js.css">
+
+    <video id="video_player" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" data-setup='{ "autoplay": true, "techOrder": ["flash"] }'>
+      <source src="rtmp://stream.dev.ldn.kastr.tv:1935/live/9b735399-54a3-4e1e-a886-6f262ec2c5eb?KastrChannelId=5a9d1a86-d185-4dbe-a801-aa376ac764fc&KastrClientId=D86443AF-A6B6-41E7-A566-9BEAD6C35801" type='rtmp/mp4'>
+    </video>
+
+    <script type="text/javascript">
+      videojs.options.flash.swf = "../../dist/video-js.swf";
+      var hsnPlayer;
+
+      videojs("video_player", {
+        flash: {
+            flashVars: {
+                rtmpBufferTime: 0.0001
+            }
+        }
+      }).ready(function () {
+
+        var consoleh = function(event) {
+          return function() {
+            console.log(event, arguments)
+          }
+        }
+
+        hsnPlayer = this;
+        hsnPlayer.play();
+        hsnPlayer.on('waiting', consoleh("waiting"))
+        hsnPlayer.on('durationchange', consoleh("duration"))
+        hsnPlayer.on('loadedmetadata', consoleh("loaded"))
+        hsnPlayer.on('canplaythrough', consoleh("canplaythrough"))
+        hsnPlayer.on('rtmpretry', consoleh('rtmp retry'))
+      });
+    </script>
+	</body>
+</html>

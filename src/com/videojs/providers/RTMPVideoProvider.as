@@ -422,7 +422,7 @@ package com.videojs.providers{
             _ns = new NetStream(_nc);
             _ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStreamStatus);
             _ns.client = this;
-            _ns.bufferTime = 1;
+            _ns.bufferTime = 0.1;
             _ns.play(_src.streamURL);
             _videoReference.attachNetStream(_ns);
             _model.broadcastEventExternally(ExternalEventName.ON_LOAD_START);
@@ -444,7 +444,7 @@ package com.videojs.providers{
             // in the file itself, which means that this logic will only work if the asset is playing - preload
             // won't ever cause this logic to run :(
             else if(_ns.bytesTotal > 0 && _metadata != null && _metadata.duration != undefined){
-                _currentThroughput = _ns.bytesLoaded / ((getTimer() - _loadStartTimestamp) / 1000);
+                _currentThroughput = _ns.bytesLoaded / ((getTimer() - _loadStartTimestamp) / 1);
                 var __estimatedTimeToLoad:Number = (_ns.bytesTotal - _ns.bytesLoaded) * _currentThroughput;
                 if(__estimatedTimeToLoad <= _metadata.duration){
                     _throughputTimer.stop();
@@ -487,6 +487,9 @@ package com.videojs.providers{
 
         private function onNetStreamStatus(e:NetStatusEvent):void{
             switch(e.info.code){
+        				case "NetStream.Video.DimensionChange":
+         					  onMetaData(new Object());
+         					  break;
                 case "NetStream.Play.Reset":
                     break;
                 case "NetStream.Play.Start":
